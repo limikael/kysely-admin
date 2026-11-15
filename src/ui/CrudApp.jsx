@@ -6,9 +6,12 @@ import {useState, useMemo} from "react";
 import CrudMain from "./CrudMain.jsx";
 import JsonRpcClient from "../utils/JsonRpcClient.js";
 import '@mantine/core/styles.css';
+import CrudAuth from "./CrudAuth.jsx";
 
 function CrudAppLoaded({rpc, schema}) {
     let [selectedTable,setSelectedTable]=useState(schema.tables[0].name);
+
+    return <CrudAuth />;
 
     return (
         <AppShell header={{ height: 60 }} navbar={{ width: 250, breakpoint: 'sm' }}
