@@ -100,7 +100,7 @@ export default class JsonRpcServer {
             if (typeof handlerMethod !== 'function') {
                 throw {
                     code: -32601,
-                    message: 'Method not found'+method
+                    message: 'Method not found: '+method
                 };
             }
 

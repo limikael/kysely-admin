@@ -21,7 +21,13 @@ export default defineConfig(async ()=>{
     });
 
     await reconcileSchema({kysely: db, sql: schemaSql, log: console.log, destructive: true});
-    let backend=new CrudBackend({kysely: db, pathname: "/api"});
+    let backend=new CrudBackend({
+        kysely: db, 
+        pathname: "/api", 
+        serverSecret: "hello",
+        adminUsername: "admin",
+        adminPassword: "admin"
+    });
 
     return ({
         plugins: [
