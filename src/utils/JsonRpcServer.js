@@ -35,8 +35,15 @@ export default class JsonRpcServer {
             });
         }
 
+        let context={
+            request,
+            responseHeaders: new Headers({
+                'Content-Type': 'application/json'
+            })
+        };
+
         const responses = await Promise.all(
-            requests.map(rpcRequest => this.handleRpcRequest(rpcRequest, request))
+            requests.map(rpcRequest => this.handleRpcRequest(rpcRequest, context))
         );
 
         const filtered = responses.filter(response => response !== null);
@@ -46,11 +53,12 @@ export default class JsonRpcServer {
         }
 
         return this.createResponse(
-            isBatch ? filtered : filtered[0]
+            isBatch ? filtered : filtered[0],
+            context.responseHeaders
         );
     }
 
-    async handleRpcRequest(rpcRequest, request) {
+    async handleRpcRequest(rpcRequest, context) {
         if (
             !rpcRequest ||
             typeof rpcRequest !== 'object' ||
@@ -86,7 +94,7 @@ export default class JsonRpcServer {
 
             let handler=this.handler;
             if (typeof handler=="function")
-                handler=await handler(request);
+                handler=await handler(context);
             const handlerMethod = handler[method];
 
             if (typeof handlerMethod !== 'function') {
@@ -126,12 +134,10 @@ export default class JsonRpcServer {
         }
     }
 
-    createResponse(body) {
+    createResponse(body, headers) {
         return new Response(JSON.stringify(body), {
             status: 200,
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            headers
         });
     }
 }

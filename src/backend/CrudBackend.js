@@ -2,10 +2,8 @@ import JsonRpcServer from "../utils/JsonRpcServer.js";
 import {kyselyQbeWhere} from "../utils/kysely-util.js";
 
 class CrudBackendHandler {
-	constructor(request, backend) {
-		this.backend=backend;
-		this.request=request;
-		this.kysely=this.backend.kysely;
+	constructor(context) {
+		this.kysely=context.backend.kysely;
 	}
 
 	async getSchema() {
@@ -56,10 +54,8 @@ export default class CrudBackend {
 		});
 	}
 
-	createHandler=async (request)=>{
-		let handler=new CrudBackendHandler(request,this);
-
-		return handler; 
+	createHandler=async (context)=>{
+		return new CrudBackendHandler({backend: this, ...context});
 	}
 
 	handleRequest=async (request)=>{

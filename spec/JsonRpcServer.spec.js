@@ -30,16 +30,19 @@ describe("JsonRpcServer",()=>{
 
 	it("can handle requests with a factory",async ()=>{
 		class Handler {
-			constructor(request) {
+			constructor({request, responseHeaders}) {
 				this.request=request;
+				this.responseHeaders=responseHeaders;
 			}
 
 			async addone(val) {
+				this.responseHeaders.set("test","something");
+
 				return [val+1,this.request.url];
 			}
 		}
 
-		let server=new JsonRpcServer(request=>new Handler(request));
+		let server=new JsonRpcServer(context=>new Handler(context));
 		let response=await server.handleRequest(new Request("http://example.com",{
 	        method: 'POST',
 	        headers: {
@@ -52,6 +55,8 @@ describe("JsonRpcServer",()=>{
 				id: 123
 	        })
 		}));
+
+		expect(response.headers.get("test")).toEqual("something");
 
 		let responseJson=await response.json();
 		//console.log(responseJson);
