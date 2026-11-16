@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:bundle-test": "vite --config=vite.config.bundle-test.js",
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",

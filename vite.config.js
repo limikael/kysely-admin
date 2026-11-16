@@ -30,6 +30,7 @@ export default defineConfig(async ()=>{
     });
 
     return ({
+        base: './',
         plugins: [
             react(),
             viteRequestHandlerPlugin(backend.handleRequest)
