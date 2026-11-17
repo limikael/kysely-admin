@@ -46,7 +46,8 @@ class CrudBackendHandler {
 	}
 
 	async assertLogin() {
-		if (!backend.adminUsername && !backend.adminPassword)
+		if (!this.backend.adminUsername && 
+				!this.backend.adminPassword)
 			return;
 
 		let jwt=await headersGetJwt(this.request.headers,this.backend.cookieName,{
