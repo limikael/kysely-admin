@@ -97,7 +97,22 @@ class CrudBackendHandler {
 }
 
 export default class CrudBackend {
-	constructor({kysely, pathname, cookieName, serverSecret, adminUsername, adminPassword}) {
+	constructor({kysely, pathname, cookieName, serverSecret, adminUsername, adminPassword,
+			assetHandler}) {
+		this.pathname=pathname
+		if (!this.pathname)
+			this.pathname="";
+
+		if (!this.pathname.startsWith("/"))
+			this.pathname="/"+this.pathname;
+
+		if (!this.pathname.endsWith("/"))
+			this.pathname=this.pathname+"/";
+
+		this.assetHandler=assetHandler;
+		if (this.assetHandler)
+			this.assetHandler.setPathname(this.pathname);
+
 		this.adminUsername=adminUsername;
 		this.adminPassword=adminPassword;
 		this.serverSecret=serverSecret;
@@ -110,7 +125,7 @@ export default class CrudBackend {
 
 		this.kysely=kysely;
 		this.jsonRpcServer=new JsonRpcServer(this.createHandler,{
-			pathname
+			pathname: this.pathname
 		});
 	}
 
@@ -119,6 +134,26 @@ export default class CrudBackend {
 	}
 
 	handleRequest=async (request)=>{
-		return await this.jsonRpcServer.handleRequest(request);
+		let url=new URL(request.url);
+		//console.log(url.pathname,this.pathname);
+		if (url.pathname!=this.pathname && 
+				url.pathname.replaceAll("/","")==this.pathname.replaceAll("/","")) {
+			url.pathname=this.pathname;
+
+			//console.log("will redirect to: "+this.pathname);
+			return Response.redirect(url);
+		}
+
+		if (this.assetHandler) {
+			let assetResponse=await this.assetHandler.handleRequest(request);
+			if (assetResponse)
+				return assetResponse;
+		}
+
+		let rpcResponse=await this.jsonRpcServer.handleRequest(request);
+		if (rpcResponse)
+			return rpcResponse;
+
+		//return new Response("not found");
 	}
 }

@@ -6,6 +6,9 @@ export default class JsonRpcServer {
     }
 
     handleRequest=async (request)=>{
+        if (request.method!="POST")
+            return;
+
         let url=new URL(request.url);
         if (this.pathname && this.pathname!=url.pathname)
             return;
