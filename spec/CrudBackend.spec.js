@@ -21,7 +21,7 @@ describe("CrudBackend",()=>{
 
         await reconcileSchema({kysely: db, sql: schemaDefSql});
 
-		let backend=new CrudBackend({kysely: db});
+		let backend=new CrudBackend({kysely: db, serverSecret: "hello"});
 		let rpc=new JsonRpcClient("http://test",{fetch: backend.handleRequest});
 		let schema=await rpc.getSchema();
 		expect(schema.tables[0].name).toEqual("users");
