@@ -1,6 +1,10 @@
 import {createRequest, sendResponse} from '@mjackson/node-fetch-server';
 
-export function viteRequestHandlerPlugin(requestHandler) {
+export function viteRequestHandlerPlugin(requestHandler, options={}) {
+    let name=options.name;
+    if (!name)
+        name='vite-request-handler';
+
     async function handler(req, res, next) {
         try {
             const request = createRequest(req, res);
@@ -17,7 +21,7 @@ export function viteRequestHandlerPlugin(requestHandler) {
     }
 
     return {
-        name: 'vite-request-handler',
+        name,
 
         configureServer(server) {
             server.middlewares.use(handler);

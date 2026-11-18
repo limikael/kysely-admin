@@ -13,7 +13,16 @@ let schemaSql=`
     );
 `;
 
-export default defineConfig(async ()=>{
+export default defineConfig(async ({command})=>{
+    if (command=="build") {
+        return {
+            base: './',
+            plugins: [
+                react(),
+            ],
+        };
+    }
+
     const db=new Kysely({
         dialect: new SqliteDialect({
             database: new Database('./dev.sqlite')
@@ -30,7 +39,7 @@ export default defineConfig(async ()=>{
     });
 
     return ({
-        base: './',
+//        base: './',
         plugins: [
             react(),
             viteRequestHandlerPlugin(backend.handleRequest)
