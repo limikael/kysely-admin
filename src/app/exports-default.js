@@ -1,2 +1,2 @@
-export {kyselyAdmin} from "../backend/kysely-admin.js";
+export {kyselyAdminFetchHandler} from "../backend/kysely-admin-fetch-handler.js";
 export {kyselyAdminVitePlugin} from "../backend/kysely-admin-vite-plugin.js";

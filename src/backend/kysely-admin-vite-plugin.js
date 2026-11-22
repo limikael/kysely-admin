@@ -1,6 +1,6 @@
-import {kyselyAdmin} from "./kysely-admin.js";
+import {kyselyAdminFetchHandler} from "./kysely-admin-fetch-handler.js";
 import {viteRequestHandlerPlugin} from "../utils/vite-request-handler-plugin.js";
 
 export function kyselyAdminVitePlugin(options) {
-	return viteRequestHandlerPlugin(kyselyAdmin(options),{name: "kysely-admin"});
+	return viteRequestHandlerPlugin(kyselyAdminFetchHandler(options),{name: "kysely-admin"});
 }
