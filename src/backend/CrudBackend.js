@@ -36,7 +36,7 @@ class CrudBackendHandler {
 	}
 
 	async logout() {
-		headersDeleteCookie(this.responseHeaders,this.backend.cookieName);
+		await headersDeleteCookie(this.responseHeaders,this.backend.cookieName);
 	}
 
 	async getSchema() {
